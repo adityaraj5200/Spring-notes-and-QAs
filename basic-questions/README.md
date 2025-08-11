@@ -128,6 +128,109 @@ record MailConfig(String host, int port, String username) {}
 ### Q10: What is @RestController?
 **Answer:** A convenience annotation that combines `@Controller` and `@ResponseBody`. It's used for REST APIs where methods return data that should be written directly to the HTTP response body.
 
+<details>
+<summary>What do `@ResponseBody` do?</summary>
+
+`@ResponseBody` in Spring tells Spring MVC:
+
+> “Don’t render a view — instead, take the method’s return value, convert it to a suitable format (usually JSON or XML), and write it directly to the HTTP response body.”
+
+---
+
+## **1️⃣ Without `@ResponseBody`**
+
+By default, Spring MVC assumes the method returns a **view name** (like `index`, `home`, etc.).
+
+```java
+@Controller
+public class MyController {
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello"; // Looks for hello.html or hello.jsp
+    }
+}
+```
+
+---
+
+## **2️⃣ With `@ResponseBody`**
+
+Now Spring will:
+
+1. Take the return value.
+2. Pass it to an **HttpMessageConverter** (e.g., Jackson for JSON).
+3. Write the result directly to the HTTP response body.
+
+```java
+@Controller
+public class MyController {
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String hello() {
+        return "Hello, World!"; // Sends plain text as response
+    }
+}
+```
+
+📤 Output in browser:
+
+```
+Hello, World!
+```
+
+(No view rendering, no HTML template lookup.)
+
+---
+
+## **3️⃣ Common use case: JSON APIs**
+
+```java
+@Controller
+public class UserController {
+
+    @GetMapping("/user")
+    @ResponseBody
+    public User getUser() {
+        return new User("Alice", 25); // Will be JSON
+    }
+}
+```
+
+📤 Output:
+
+```json
+{"name":"Alice","age":25}
+```
+
+*(Assuming Jackson is on the classpath)*
+
+---
+
+## **4️⃣ Shortcut: `@RestController`**
+
+Instead of writing `@Controller` + `@ResponseBody` on every method,
+use `@RestController` → it **implies `@ResponseBody` for all methods**.
+
+```java
+@RestController
+public class UserController {
+    @GetMapping("/user")
+    public User getUser() { ... } // auto JSON
+}
+```
+
+---
+
+✅ **TL;DR:**
+`@ResponseBody` bypasses view rendering and sends your method’s return value straight into the HTTP response body, usually after converting it to JSON or XML.
+
+---
+
+
+</details> 
+
 ---
 
 ### Q11: What is @RequestMapping?
