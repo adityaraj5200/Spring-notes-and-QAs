@@ -62,7 +62,8 @@ class EmailService {
 ---
 
 ### Q6: What is constructor injection and why prefer it?
-**Answer:** Constructor injection means dependencies are provided through the constructor. It's preferred because it ensures required dependencies are provided, makes the class immutable, and is easier to test.
+**Answer:** Constructor injection means dependencies are provided through the constructor. It's preferred because it makes a class’s dependencies explicit in its constructor, ensuring they are provided at creation time, which prevents partially initialized objects and avoids `NullPointerException`. It also allows dependencies to be `final` (making them immutable), supports easy unit testing without a Spring context, and aligns with clean code principles by clearly showing what the class needs to function.
+
 
 **Example:**
 ```java
@@ -585,8 +586,29 @@ class PaymentService {
 
 ---
 
-### Q42: What is @Scope annotation?
+### Q42: What is @Scope annotation? What are different types of it?
 **Answer:** Specifies the scope of a bean (singleton, prototype, request, session, etc.).
+
+Spring supports the following bean scopes:
+
+1. **`singleton`** (default):
+    - A single shared instance of the bean is created and used throughout the Spring IoC container. This is the default scope if no scope is specified.
+    - Every request for this bean will return the same instance.
+2. **`prototype`**:
+    - A new instance of the bean is created each time it is requested from the Spring container.
+    - This scope is suitable for beans that need to be stateless or have a short lifecycle.
+3. **`request`** (Web applications only):
+    - A new instance is created for each HTTP request.
+    - The bean is only available during the lifecycle of the HTTP request and is discarded after the request is completed.
+4. **`session`** (Web applications only):
+    - A new instance is created for each HTTP session.
+    - The bean is tied to the HTTP session and remains active for the duration of that session.
+5. **`application`** (Web applications only):
+    - A single instance of the bean is created for the entire ServletContext (the entire web application).
+    - The bean is shared across all HTTP requests and sessions in the application.
+6. **`websocket`** (Web applications only):
+    - A new instance is created for each WebSocket connection.
+    - The bean is tied to the lifecycle of a WebSocket connection and is discarded once the connection is closed.
 
 **Example:**
 ```java
