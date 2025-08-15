@@ -62,8 +62,7 @@ class EmailService {
 ---
 
 ### Q6: What is constructor injection and why prefer it?
-**Answer:** Constructor injection means dependencies are provided through the constructor. It's preferred because it makes a class’s dependencies explicit in its constructor, ensuring they are provided at creation time, which prevents partially initialized objects and avoids `NullPointerException`. It also allows dependencies to be `final` (making them immutable), supports easy unit testing without a Spring context, and aligns with clean code principles by clearly showing what the class needs to function.
-
+**Answer:** Constructor injection means dependencies are provided through the constructor. It's preferred because it ensures required dependencies are provided, makes the class immutable, and is easier to test.
 
 **Example:**
 ```java
